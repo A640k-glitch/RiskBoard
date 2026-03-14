@@ -1,15 +1,11 @@
 import { useAuth } from '../hooks/useAuth';
-import { Navigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Logo } from '../components/shared/Logo';
 
 export function Landing() {
   const { user } = useAuth();
-
-  if (user) {
-    return <Navigate to="/dashboard" replace />;
-  }
 
   return (
     <div className="flex-1 flex flex-col relative overflow-hidden h-full">

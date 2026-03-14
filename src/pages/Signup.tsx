@@ -10,27 +10,27 @@ export function Signup() {
   }
 
   return (
-    <div className="h-full flex items-center justify-center p-4 relative overflow-hidden bg-black">
+    <div className="h-full flex items-center justify-center p-4 relative overflow-hidden bg-[var(--bg-base)]">
       {/* Immersive Background Video */}
       <div className="absolute inset-0 z-0 pointer-events-none opacity-40">
         <video autoPlay muted loop playsInline className="w-full h-full object-cover grayscale brightness-[0.4] contrast-150">
           <source src="https://assets.mixkit.co/videos/preview/mixkit-business-charts-and-data-on-a-screen-21443-large.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)] via-transparent to-[var(--bg-base)]" />
       </div>
 
-      <div className="w-full max-w-[340px] border border-white/10 bg-black/40 p-6 relative rounded-2xl shadow-2xl z-10 backdrop-blur-2xl">
+      <div className="w-full max-w-[340px] border border-[var(--border)] bg-[var(--bg-surface)]/90 p-6 relative rounded-2xl shadow-2xl z-10 backdrop-blur-2xl">
         <div className="mb-8 text-center flex flex-col items-center">
           <Logo className="w-12 h-12 text-[var(--accent)] mb-4" />
-          <h1 className="text-xl font-black font-sans text-white tracking-widest uppercase">Register</h1>
-          <p className="text-white/40 mt-2 font-sans text-[10px] leading-tight max-w-[200px] uppercase font-bold tracking-widest">
+          <h1 className="text-xl font-black font-sans text-[var(--text-primary)] tracking-widest uppercase">Register</h1>
+          <p className="text-[var(--text-muted)] mt-2 font-sans text-[10px] leading-tight max-w-[200px] uppercase font-bold tracking-widest">
             Join the protocol
           </p>
         </div>
 
         <button 
           onClick={signIn}
-          className="w-full bg-white text-black py-3 rounded-xl font-sans font-black hover:opacity-90 transition-all flex items-center justify-center gap-3 mb-8 text-[11px] uppercase tracking-widest"
+          className="w-full bg-[var(--text-primary)] text-[var(--bg-base)] py-3 rounded-xl font-sans font-black hover:opacity-90 transition-all flex items-center justify-center gap-3 mb-8 text-[11px] uppercase tracking-widest"
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -42,7 +42,7 @@ export function Signup() {
         </button>
 
         <div className="text-center font-sans text-[10px] uppercase font-black tracking-widest">
-          <p className="text-white/30 mb-2">Already registered?</p>
+          <p className="text-[var(--text-muted)] mb-2">Already registered?</p>
           <Link to="/login" className="text-[var(--accent)] hover:underline">Sign In</Link>
         </div>
       </div>

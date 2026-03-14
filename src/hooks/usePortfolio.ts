@@ -16,12 +16,13 @@ export class FreeTierLimitError extends Error {
 }
 
 export function usePortfolio() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [portfolios, setPortfolios] = useState<Portfolio[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   const fetchPortfolios = useCallback(async () => {
+    if (authLoading) return;
     if (!user) {
       setPortfolios([]);
       setLoading(false);
@@ -41,7 +42,7 @@ export function usePortfolio() {
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, [user, authLoading]);
 
   useEffect(() => {
     fetchPortfolios();
