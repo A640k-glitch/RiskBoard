@@ -9,7 +9,7 @@ interface VolatilityChartProps {
 export function VolatilityChart({ history }: VolatilityChartProps) {
   if (history.length === 0 || history[0].prices.length === 0) {
     return (
-      <div className="h-[340px] flex items-center justify-center text-[var(--text-muted)] font-sans font-light">
+      <div className="h-[200px] flex items-center justify-center text-[var(--text-muted)] font-sans font-light">
         No price history available
       </div>
     );
@@ -37,8 +37,8 @@ export function VolatilityChart({ history }: VolatilityChartProps) {
   }
 
   return (
-    <div className="h-[400px] w-full flex flex-col p-4">
-      <h3 className="text-[10px] font-medium text-[var(--text-muted)] mb-8 uppercase tracking-[0.3em] font-sans opacity-70">30-Day Price Trend (Index)</h3>
+    <div className="h-[180px] w-full flex flex-col p-1">
+      <h3 className="text-[10px] font-bold text-[var(--text-muted)] mb-1 uppercase tracking-widest">Trend</h3>
       <div className="flex-1 min-h-0">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data} margin={{ top: 5, right: 0, left: 0, bottom: 0 }}>

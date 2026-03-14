@@ -1,9 +1,10 @@
 import { useAuth } from '../../hooks/useAuth';
 import { useCurrency } from '../../hooks/useCurrency';
 import { Link, useLocation } from 'react-router-dom';
-import { LogOut, Sun, Moon, Activity } from 'lucide-react';
+import { LogOut, Sun, Moon } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
+import { Logo } from './Logo';
 
 export function Navbar() {
   const { user, signOut } = useAuth();
@@ -26,9 +27,9 @@ export function Navbar() {
 
   return (
     <nav className="border-b border-[var(--border)] bg-[var(--bg-base)]/80 backdrop-blur-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 text-[var(--text-primary)] hover:opacity-80 transition-opacity font-mono font-bold text-xl tracking-tight">
-          <span className="text-[var(--accent)]">&gt;_</span> RiskBoard
+      <div className="max-w-7xl mx-auto px-4 h-12 flex items-center justify-between">
+        <Link to="/" className="flex items-center gap-2 text-[var(--text-primary)] hover:opacity-80 transition-opacity font-bold text-sm tracking-tight uppercase">
+          <Logo className="w-4 h-4 text-[var(--accent)]" /> RiskBoard
         </Link>
         
         <div className="flex items-center gap-6 font-sans text-sm font-medium">
@@ -36,9 +37,9 @@ export function Navbar() {
             <select 
               value={currency} 
               onChange={(e) => setCurrency(e.target.value)}
-              className="bg-[var(--bg-surface)] border border-[var(--border)] text-[var(--text-primary)] rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:border-[var(--accent)] appearance-none pr-8 cursor-pointer hover:border-[var(--text-muted)] transition-colors"
+              className="bg-[var(--bg-surface)] border border-[var(--border)] text-[var(--text-primary)] rounded-lg px-2 py-1 text-[10px] font-bold focus:outline-none focus:border-[var(--accent)] appearance-none pr-6 cursor-pointer hover:border-[var(--text-muted)] transition-colors uppercase tracking-widest"
             >
-              {Object.keys(rates).slice(0, 20).map(c => (
+              {Object.keys(rates).sort().map(c => (
                 <option key={c} value={c}>{c}</option>
               ))}
             </select>
@@ -89,7 +90,7 @@ export function Navbar() {
           ) : (
             <Link 
               to="/signup"
-              className="bg-[var(--accent)] text-[var(--bg-base)] px-5 py-2 font-bold hover:opacity-90 transition-opacity rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transform duration-200"
+              className="bg-[var(--text-primary)] text-[var(--bg-base)] px-4 py-1.5 text-sm font-semibold rounded-lg hover:opacity-90 transition-opacity shadow-sm"
             >
               Get Started
             </Link>

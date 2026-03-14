@@ -1,93 +1,121 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
 }
 
 @layer utilities {
-  .perspective-1000 {
-    perspective: 1000px;
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
-  .transform-style-3d {
-    transform-style: preserve-3d;
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }
 
 :root {
   --bg-base: #000000;
-  --bg-surface: #111111;
-  --bg-elevated: #1c1c1e;
-  --border: #2c2c2e;
+  --bg-surface: #0a0a0a;
+  --bg-elevated: #111111;
+  --border: #1c1c1e;
   --text-primary: #ffffff;
   --text-muted: #8e8e93;
-  --accent: #ff9f0a; /* Bloomberg Amber */
-  --accent-hover: #ffb340;
+  --accent: #ffffff;
+  --accent-hover: #dddddd;
   --danger: #ff453a;
   --warning: #ffd60a;
   --success: #32d74b;
-  --chart-1: #ff9f0a;
-  --chart-2: #32d74b;
+  --chart-1: #0a84ff;
+  --chart-2: #30d158;
   --chart-3: #ff453a;
   --chart-4: #ffd60a;
-  --chart-5: #0a84ff;
+  --chart-5: #5e5ce6;
 }
 
 .light-mode {
   --bg-base: #f5f5f7;
   --bg-surface: #ffffff;
   --bg-elevated: #ffffff;
-  --border: rgba(0,0,0,0.08);
+  --border: rgba(0,0,0,0.06);
   --text-primary: #1d1d1f;
   --text-muted: #86868b;
-  --accent: #0071e3;
-  --accent-hover: #0077ed;
+  --accent: #000000;
+  --accent-hover: #333333;
   --danger: #ff3b30;
   --warning: #ff9500;
   --success: #34c759;
 }
 
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+html {
+  font-size: 13px; /* 80% scaling */
+}
+
 body {
   background-color: var(--bg-base);
   color: var(--text-primary);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   -webkit-font-smoothing: antialiased;
+  line-height: 1.4;
+  margin: 0;
+}
+
+#root {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+@layer utilities {
+  .ticker-mask {
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+  }
 }
 
 /* Apple-like soft shadows for cards */
 .apple-card {
   background-color: var(--bg-surface);
   border: 1px solid var(--border);
-  border-radius: 32px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  padding: var(--card-padding);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .dark .apple-card {
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
 }
 
 .apple-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
 .dark .apple-card:hover {
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg-base);
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
   background: var(--border);
-  border-radius: 4px;
+  border-radius: 6px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-muted);

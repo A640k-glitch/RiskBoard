@@ -3,6 +3,7 @@ import { X, CheckCircle2, AlertCircle, ChevronDown } from 'lucide-react';
 import Decimal from 'decimal.js';
 import type { AssetClass } from '../../types';
 import { resolveSymbolToId } from '../../lib/coingecko';
+import { useCurrency } from '../../hooks/useCurrency';
 
 interface PortfolioInputProps {
   isOpen: boolean;
@@ -140,23 +141,25 @@ export function PortfolioInput({ isOpen, onClose, onSubmit }: PortfolioInputProp
     a.name.toLowerCase().includes(symbol.toLowerCase())
   ) || [];
 
+  const { currency } = useCurrency();
+
   return (
     <>
       <div className="fixed inset-0 bg-black/50 backdrop-blur-md z-40 transition-opacity" onClick={onClose} />
-      <div className="fixed top-0 right-0 h-full w-full max-w-md bg-[var(--bg-surface)] border-l border-[var(--border)] z-50 p-10 shadow-2xl flex flex-col animate-in slide-in-from-right duration-500 ease-out">
-        <div className="flex items-center justify-between mb-12">
+      <div className="fixed top-0 right-0 h-full w-full max-w-sm bg-[var(--bg-surface)] border-l border-[var(--border)] z-50 p-6 shadow-2xl flex flex-col animate-in slide-in-from-right duration-300 ease-out">
+        <div className="flex items-center justify-between mb-8">
           <div>
-            <p className="font-mono text-[var(--accent)] text-xs mb-2 uppercase tracking-[0.3em]">// Add_Position</p>
-            <h2 className="text-3xl font-bold text-[var(--text-primary)] font-sans tracking-tight">New Asset</h2>
+            <p className="font-sans text-[var(--text-muted)] text-[10px] mb-1 font-black uppercase tracking-widest">Add Position</p>
+            <h2 className="text-2xl font-bold text-[var(--text-primary)] font-sans tracking-tight">NEW ASSET</h2>
           </div>
-          <button onClick={onClose} className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors bg-[var(--bg-elevated)] p-3 rounded-full hover:bg-[var(--border)] shadow-sm">
-            <X className="w-5 h-5" />
+          <button onClick={onClose} className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors bg-[var(--bg-elevated)] p-2 rounded-full hover:bg-[var(--border)] shadow-sm">
+            <X className="w-4 h-4" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-8 flex-1">
-          <div className="flex flex-col gap-4">
-            <label className="text-[10px] font-medium text-[var(--text-muted)] uppercase tracking-[0.3em] font-sans opacity-70">Asset Class</label>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5 flex-1 overflow-y-auto no-scrollbar">
+          <div className="flex flex-col gap-2">
+            <label className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest leading-none">Asset Class</label>
             <div className="relative">
               <select
                 value={assetClass}
@@ -165,7 +168,7 @@ export function PortfolioInput({ isOpen, onClose, onSubmit }: PortfolioInputProp
                   setSymbol('');
                   setIsValidSymbol(null);
                 }}
-                className="w-full bg-[var(--bg-base)] border border-[var(--border)] rounded-2xl px-6 py-5 text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)] transition-all appearance-none font-sans text-lg shadow-sm hover:border-[var(--text-muted)]"
+                className="w-full bg-[var(--bg-base)] border border-[var(--border)] rounded-xl px-4 py-3 text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)] transition-colors appearance-none font-bold text-xs shadow-sm uppercase tracking-widest"
               >
                 <option value="crypto">Cryptocurrency</option>
                 <option value="stock">Stock</option>
@@ -174,12 +177,12 @@ export function PortfolioInput({ isOpen, onClose, onSubmit }: PortfolioInputProp
                 <option value="commodity">Commodity</option>
                 <option value="cash">Cash</option>
               </select>
-              <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--text-muted)] pointer-events-none" />
+              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)] pointer-events-none" />
             </div>
           </div>
 
-          <div className="flex flex-col gap-4" ref={dropdownRef}>
-            <label className="text-[10px] font-medium text-[var(--text-muted)] uppercase tracking-[0.3em] font-sans opacity-70">Symbol</label>
+          <div className="flex flex-col gap-2" ref={dropdownRef}>
+            <label className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest leading-none">Symbol</label>
             <div className="relative">
               <input
                 type="text"
@@ -192,20 +195,20 @@ export function PortfolioInput({ isOpen, onClose, onSubmit }: PortfolioInputProp
                 onFocus={() => setShowDropdown(true)}
                 onBlur={handleSymbolBlur}
                 placeholder={assetClass === 'crypto' ? 'e.g. BTC' : 'e.g. AAPL'}
-                className="w-full bg-[var(--bg-base)] border border-[var(--border)] rounded-2xl px-6 py-5 text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)] transition-all font-mono uppercase text-lg shadow-sm hover:border-[var(--text-muted)]"
+                className="w-full bg-[var(--bg-base)] border border-[var(--border)] rounded-xl px-4 py-3 text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)] transition-colors font-mono uppercase text-sm shadow-sm font-bold"
               />
-              <div className="absolute right-5 top-1/2 -translate-y-1/2 flex items-center gap-3">
-                {isValidating && <div className="w-5 h-5 border-2 border-[var(--accent)] border-t-transparent rounded-full animate-spin" />}
-                {isValidSymbol === true && <CheckCircle2 className="w-5 h-5 text-[var(--success)]" />}
-                {isValidSymbol === false && <AlertCircle className="w-5 h-5 text-[var(--danger)]" />}
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                {isValidating && <div className="w-3 h-3 border-2 border-[var(--accent)] border-t-transparent rounded-full animate-spin" />}
+                {isValidSymbol === true && <CheckCircle2 className="w-4 h-4 text-[var(--success)]" />}
+                {isValidSymbol === false && <AlertCircle className="w-4 h-4 text-[var(--danger)]" />}
                 <ChevronDown 
-                  className={`w-5 h-5 text-[var(--text-muted)] cursor-pointer transition-transform ${showDropdown ? 'rotate-180' : ''}`}
+                  className={`w-4 h-4 text-[var(--text-muted)] cursor-pointer transition-transform ${showDropdown ? 'rotate-180' : ''}`}
                   onClick={() => setShowDropdown(!showDropdown)}
                 />
               </div>
 
               {showDropdown && filteredAssets.length > 0 && (
-                <div className="absolute z-10 w-full mt-2 bg-[var(--bg-elevated)] border border-[var(--border)] rounded-xl shadow-2xl max-h-60 overflow-y-auto backdrop-blur-xl">
+                <div className="absolute z-10 w-full mt-1 bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg shadow-lg max-h-48 overflow-y-auto backdrop-blur-md">
                   {filteredAssets.map((asset) => (
                     <div
                       key={asset.symbol}
@@ -213,7 +216,6 @@ export function PortfolioInput({ isOpen, onClose, onSubmit }: PortfolioInputProp
                       className="px-5 py-4 hover:bg-[var(--bg-surface)] cursor-pointer flex items-center justify-between border-b border-[var(--border)] last:border-0 transition-colors"
                     >
                       <span className="font-mono font-bold text-[var(--text-primary)]">{asset.symbol}</span>
-                      <span className="text-sm text-[var(--text-muted)] font-sans">{asset.name}</span>
                     </div>
                   ))}
                 </div>
@@ -221,42 +223,42 @@ export function PortfolioInput({ isOpen, onClose, onSubmit }: PortfolioInputProp
             </div>
           </div>
 
-          <div className="flex flex-col gap-4">
-            <label className="text-[10px] font-medium text-[var(--text-muted)] uppercase tracking-[0.3em] font-sans opacity-70">Quantity</label>
+          <div className="flex flex-col gap-2">
+            <label className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest leading-none">Quantity</label>
             <input
               type="number"
               step="any"
               value={quantity}
               onChange={(e) => setQuantity(e.target.value)}
               placeholder="0.00"
-              className="w-full bg-[var(--bg-base)] border border-[var(--border)] rounded-2xl px-6 py-5 text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)] transition-all font-mono text-lg shadow-sm hover:border-[var(--text-muted)]"
+              className="w-full bg-[var(--bg-base)] border border-[var(--border)] rounded-xl px-4 py-3 text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)] transition-colors font-mono text-sm shadow-sm font-bold"
             />
           </div>
 
-          <div className="flex flex-col gap-4">
-            <label className="text-[10px] font-medium text-[var(--text-muted)] uppercase tracking-[0.3em] font-sans opacity-70">Average Buy Price (USD)</label>
+          <div className="flex flex-col gap-2">
+            <label className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest leading-none">Average Buy Price ({currency})</label>
             <input
               type="number"
               step="any"
               value={buyPrice}
               onChange={(e) => setBuyPrice(e.target.value)}
               placeholder="0.00"
-              className="w-full bg-[var(--bg-base)] border border-[var(--border)] rounded-2xl px-6 py-5 text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)] transition-all font-mono text-lg shadow-sm hover:border-[var(--text-muted)]"
+              className="w-full bg-[var(--bg-base)] border border-[var(--border)] rounded-xl px-4 py-3 text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)] transition-colors font-mono text-sm shadow-sm"
             />
           </div>
 
           {error && (
-            <div className="bg-[var(--danger)]/10 text-[var(--danger)] p-5 rounded-2xl text-sm flex items-start gap-3 border border-[var(--danger)]/20 shadow-sm">
-              <AlertCircle className="w-5 h-5 mt-0.5 shrink-0" />
-              <p className="font-medium">{error}</p>
+            <div className="bg-[var(--danger)]/10 text-[var(--danger)] p-3 rounded-lg text-sm flex items-start gap-2 border border-[var(--danger)]/20 shadow-sm mt-2">
+              <AlertCircle className="w-4 h-4 shrink-0" />
+              <p className="font-medium text-xs">{error}</p>
             </div>
           )}
 
-          <div className="mt-auto pt-10 border-t border-[var(--border)]">
+          <div className="mt-8 pt-6 border-t border-[var(--border)]">
             <button
               type="submit"
               disabled={isSubmitting || isValidSymbol === false}
-              className="w-full bg-[var(--accent)] text-[var(--bg-base)] font-bold py-5 rounded-2xl hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+              className="w-full bg-[var(--text-primary)] text-[var(--bg-base)] font-semibold py-3 rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed text-sm shadow-sm"
             >
               {isSubmitting ? 'Adding...' : 'Add Asset'}
             </button>

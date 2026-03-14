@@ -1,10 +1,9 @@
 {
-  "projectId": "gen-lang-client-0092356283",
-  "appId": "1:340890723302:web:687921dbc231cb66d0ac27",
-  "apiKey": "AIzaSyCNu2z0gnS5hHiLLeCjx84Kh71_IhqLsIc",
-  "authDomain": "gen-lang-client-0092356283.firebaseapp.com",
-  "firestoreDatabaseId": "ai-studio-ef9dc579-9e56-4bc1-b913-e36e43da0d8e",
-  "storageBucket": "gen-lang-client-0092356283.firebasestorage.app",
-  "messagingSenderId": "340890723302",
+  "projectId": "riskboard-app-58294",
+  "appId": "1:745142764801:web:418218dcf9dc9a79b24700",
+  "apiKey": "AIzaSyAVb9y19mHNOiadZyghzKbXhd07ZrkZLvs",
+  "authDomain": "riskboard-app-58294.firebaseapp.com",
+  "storageBucket": "riskboard-app-58294.firebasestorage.app",
+  "messagingSenderId": "745142764801",
   "measurementId": ""
 }

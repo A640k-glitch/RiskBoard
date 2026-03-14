@@ -1,17 +1,18 @@
 import { Link } from 'react-router-dom';
+import { Logo } from './Logo';
 
 export function Footer() {
   return (
-    <footer className="border-t border-[var(--border)] bg-[var(--bg-surface)] py-4 mt-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <div className="text-[var(--text-muted)] text-xs font-sans text-center sm:text-left">
-          Copyright © {new Date().getFullYear()} RiskBoard Inc. All rights reserved.
+    <footer className="border-t border-[var(--border)] bg-[var(--bg-base)] py-3">
+      <div className="max-w-7xl mx-auto px-4 flex items-center justify-between text-[10px] uppercase tracking-widest font-bold text-[var(--text-muted)] opacity-60">
+        <div className="flex items-center gap-3">
+          <Logo className="w-3 h-3 grayscale" />
+          <span>RiskBoard Inc.</span>
         </div>
-        <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6 text-xs font-sans text-[var(--text-muted)]">
-          <Link to="#" className="hover:text-[var(--text-primary)] transition-colors">Privacy Policy</Link>
-          <Link to="#" className="hover:text-[var(--text-primary)] transition-colors">Terms of Use</Link>
+        <div className="flex gap-6">
+          <Link to="#" className="hover:text-[var(--text-primary)] transition-colors">Privacy</Link>
+          <Link to="#" className="hover:text-[var(--text-primary)] transition-colors">Terms</Link>
           <Link to="#" className="hover:text-[var(--text-primary)] transition-colors">Legal</Link>
-          <Link to="#" className="hover:text-[var(--text-primary)] transition-colors">Site Map</Link>
         </div>
       </div>
     </footer>

@@ -55,7 +55,7 @@ export default function App() {
   return (
     <CurrencyProvider>
       <Router>
-        <div className="min-h-screen flex flex-col bg-[var(--bg-base)] text-[var(--text-primary)] font-sans selection:bg-[var(--accent)]/30">
+        <div className="h-screen flex flex-col bg-[var(--bg-base)] text-[var(--text-primary)] font-sans selection:bg-[var(--accent)]/30 overflow-hidden">
           <Toaster 
             position="top-right"
             toastOptions={{
@@ -80,7 +80,7 @@ export default function App() {
             }}
           />
           <Navbar />
-          <main className="flex-1 flex flex-col">
+          <main className="flex-1 overflow-hidden min-h-0">
             <AnimatedRoutes />
           </main>
           <Footer />

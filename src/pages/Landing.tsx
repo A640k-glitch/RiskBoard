@@ -2,6 +2,7 @@ import { useAuth } from '../hooks/useAuth';
 import { Navigate, Link } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 import { motion } from 'motion/react';
+import { Logo } from '../components/shared/Logo';
 
 export function Landing() {
   const { user } = useAuth();
@@ -11,80 +12,88 @@ export function Landing() {
   }
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex flex-col relative overflow-hidden perspective-1000">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 z-0 opacity-10 pointer-events-none" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23888888' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        backgroundSize: '30px 30px'
-      }} />
-
-      <section className="flex-1 flex flex-col justify-center px-4 py-20 relative z-10 max-w-7xl mx-auto w-full">
-        <motion.div 
-          initial={{ opacity: 0, x: -100, rotateY: -30, scale: 0.9 }}
-          animate={{ opacity: 1, x: 0, rotateY: 0, scale: 1 }}
-          transition={{ 
-            duration: 0.8, 
-            ease: [0.16, 1, 0.3, 1], // Apple-like spring ease
-          }}
-          className="max-w-3xl transform-style-3d"
+    <div className="flex-1 flex flex-col relative overflow-hidden h-full">
+      {/* Hero Background Video */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.5 }}
+        transition={{ duration: 2, ease: "easeOut" }}
+        className="absolute inset-0 z-0 pointer-events-none"
+      >
+        <video 
+          autoPlay 
+          muted 
+          loop 
+          playsInline 
+          className="w-full h-full object-cover grayscale brightness-[0.6] contrast-125"
+          poster="/hero.png"
         >
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+          <source src="https://assets.mixkit.co/videos/preview/mixkit-business-charts-and-data-on-a-screen-21443-large.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)] via-black/20 to-[var(--bg-base)]" />
+        <div className="absolute inset-0 bg-black/40" />
+      </motion.div>
+
+      <section className="flex-1 flex flex-col justify-center items-center px-4 relative z-10 max-w-6xl mx-auto w-full text-center">
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col items-center"
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2, duration: 0.6 }}
-            className="font-mono text-[var(--accent)] text-sm mb-6 uppercase tracking-widest"
+            className="mb-6"
           >
-            // SYSTEM.INIT
-          </motion.p>
+            <Logo className="w-20 h-20 text-[var(--accent)]" />
+          </motion.div>
           
           <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.6 }}
-            className="text-5xl md:text-7xl font-bold text-[var(--text-primary)] tracking-tight mb-2 font-sans"
+            transition={{ delay: 0.3, duration: 0.8 }}
+            className="text-7xl md:text-8xl lg:text-[10rem] font-bold text-[var(--text-primary)] tracking-tighter mb-8 leading-[0.8] uppercase"
           >
-            Don't let hidden risk
+            Secure <br/>
+            Portfolio <br/>
+            <span className="text-[var(--accent)]">Legacy.</span>
           </motion.h1>
-          <motion.h1 
+          
+          <motion.p 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6 }}
-            className="text-5xl md:text-7xl font-bold text-[var(--accent)] tracking-tight mb-8 font-mono"
+            className="text-xl md:text-2xl text-[var(--text-muted)] max-w-2xl mb-12 leading-relaxed font-bold uppercase tracking-[0.2em]"
           >
-            &gt; destroy your<br/>portfolio.
-          </motion.h1>
-          
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.6 }}
-            className="text-lg md:text-xl text-[var(--text-muted)] max-w-2xl mb-12 font-sans leading-relaxed"
-          >
-            RiskBoard is the definitive analytics shield for retail investors globally. 
-            Navigate volatility, secure your assets, and trade with absolute peace of mind. 
-            Protect your wealth. Secure your legacy.
+            Institutional intelligence for the modern investor. 
           </motion.p>
 
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 0.6 }}
-            className="flex flex-col sm:flex-row items-start sm:items-center gap-6 font-sans"
+            transition={{ delay: 0.5, duration: 0.6 }}
+            className="flex items-center gap-6"
           >
             <Link 
               to="/signup"
-              className="w-full sm:w-auto bg-[var(--accent)] text-[var(--bg-base)] px-10 py-5 font-bold hover:opacity-90 transition-all flex items-center justify-center gap-3 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 text-lg"
+              className="bg-[var(--text-primary)] text-[var(--bg-base)] px-10 py-4 text-sm font-black rounded-full hover:opacity-90 transition-all shadow-[0_0_30px_rgba(255,255,255,0.2)] uppercase tracking-widest"
             >
-              <ChevronRight className="w-6 h-6" /> Secure Your Portfolio
+              Get Started
             </Link>
             <Link 
               to="/about"
-              className="w-full sm:w-auto border border-[var(--border)] bg-[var(--bg-surface)] text-[var(--text-primary)] px-10 py-5 font-bold hover:bg-[var(--bg-elevated)] transition-all text-center rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-1 text-lg"
+              className="border-2 border-[var(--border)] bg-transparent text-[var(--text-primary)] px-10 py-4 text-sm font-black rounded-full hover:bg-[var(--bg-elevated)] transition-all uppercase tracking-widest backdrop-blur-sm"
             >
-              Read Docs
+              Platform
             </Link>
           </motion.div>
         </motion.div>
+
+        {/* Global Glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[var(--chart-1)]/5 blur-[150px] rounded-full pointer-events-none" />
       </section>
     </div>
   );
