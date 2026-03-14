@@ -18,7 +18,7 @@ export function RiskDashboard() {
   const portfolio = portfolios[0];
   const assets = portfolio?.assets || [];
 
-  const { prices, history, loading: pricesLoading } = usePrices(assets);
+  const { prices, history } = usePrices(assets);
   const { currency, convert } = useCurrency();
   const [isInputOpen, setIsInputOpen] = useState(false);
 
@@ -31,9 +31,7 @@ export function RiskDashboard() {
     return calculateRiskMetrics(liveAssets, history);
   }, [liveAssets, history]);
 
-  useEffect(() => {
-    if (portfolioError) toast.error(portfolioError.message);
-  }, [portfolioError]);
+  useEffect(() => { if (portfolioError) toast.error(portfolioError.message); }, [portfolioError]);
 
   useEffect(() => {
     if (!portfolioLoading && !portfolioError && assets.length === 0) {
@@ -46,7 +44,7 @@ export function RiskDashboard() {
     if (!portfolio) return;
     try {
       await removeAsset(portfolio.id, id);
-      toast.success('Asset removed successfully');
+      toast.success('Asset removed');
     } catch (error: any) {
       toast.error(error.message || 'Failed to remove asset');
     }
@@ -54,9 +52,9 @@ export function RiskDashboard() {
 
   if (portfolioLoading) {
     return (
-      <div className="space-y-4 p-4">
+      <div className="space-y-4">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <SkeletonCard /><SkeletonCard /><SkeletonCard /><SkeletonCard />
+          {[...Array(4)].map((_, i) => <SkeletonCard key={i} />)}
         </div>
         <SkeletonCard className="h-20" />
         <SkeletonCard className="h-[240px]" />
@@ -69,6 +67,7 @@ export function RiskDashboard() {
 
   return (
     <div className="space-y-3 w-full">
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[var(--border)] pb-3">
         <div>
@@ -87,7 +86,7 @@ export function RiskDashboard() {
 
       {metrics ? (
         <>
-          {/* Metric Cards — 2 col mobile, 4 col desktop */}
+          {/* Metric Cards */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
             <MetricCard label="Total Value" value={convert(metrics.totalValue).toFixed(2)} prefix={currencySymbol} />
             <MetricCard label="Total P&L" value={Math.abs(convert(metrics.totalPnL)).toFixed(2)} prefix={metrics.totalPnL.greaterThanOrEqualTo(0) ? `+${currencySymbol}` : `-${currencySymbol}`} delta={metrics.pnlPercent.toFixed(2)} />
@@ -98,7 +97,7 @@ export function RiskDashboard() {
           {/* Risk Badge */}
           <RiskBadge level={metrics.riskLevel} score={metrics.riskScore} verdict={metrics.riskVerdict} />
 
-          {/* Charts — stacked on mobile/tablet, side by side on desktop */}
+          {/* Charts */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
             <div className="lg:col-span-4 apple-card p-2 h-[220px] sm:h-[260px]">
               <AllocationChart assets={liveAssets} />
@@ -112,10 +111,7 @@ export function RiskDashboard() {
         <div className="apple-card p-10 text-center border-dashed border-2">
           <h3 className="text-base font-semibold text-[var(--text-primary)] mb-2">No Assets Yet</h3>
           <p className="text-[var(--text-muted)] mb-6 text-sm">Add your first asset to see your risk analytics.</p>
-          <button
-            onClick={() => setIsInputOpen(true)}
-            className="bg-[var(--text-primary)] text-[var(--bg-base)] px-4 py-2 rounded text-sm font-medium hover:opacity-90 transition-opacity inline-flex items-center gap-2"
-          >
+          <button onClick={() => setIsInputOpen(true)} className="bg-[var(--text-primary)] text-[var(--bg-base)] px-4 py-2 rounded text-sm font-medium hover:opacity-90 transition-opacity inline-flex items-center gap-2">
             <Plus className="w-4 h-4" /> Add Asset
           </button>
         </div>
@@ -124,16 +120,15 @@ export function RiskDashboard() {
       {/* Assets Table */}
       {liveAssets.length > 0 && (
         <div className="apple-card overflow-hidden">
-          {/* Table header */}
-          <div className="grid grid-cols-[1fr_auto_auto_auto_auto] sm:grid-cols-[1fr_auto_auto_auto_auto_auto] items-center gap-2 py-2 px-3 sm:px-5 border-b border-[var(--border)] bg-[var(--bg-surface)]">
+          {/* Table header — matches AssetRow grid */}
+          <div className="grid grid-cols-[1fr_auto_auto_auto] sm:grid-cols-[1fr_auto_auto_auto_auto] items-center gap-x-3 sm:gap-x-4 py-2 px-3 sm:px-5 border-b border-[var(--border)] bg-[var(--bg-surface)]">
             <div className="text-[8px] font-black text-[var(--text-muted)] uppercase tracking-widest">Asset_Class</div>
-            <div className="text-[8px] font-black text-[var(--text-muted)] text-right uppercase tracking-widest w-14 sm:w-20">Qty</div>
-            <div className="text-[8px] font-black text-[var(--text-muted)] text-right uppercase tracking-widest w-20 hidden sm:block">Price</div>
-            <div className="text-[8px] font-black text-[var(--text-muted)] text-right uppercase tracking-widest w-20">Value</div>
-            <div className="text-[8px] font-black text-[var(--text-muted)] text-right uppercase tracking-widest w-20">P&L</div>
-            <div className="w-6 sm:w-8" />
+            <div className="text-[8px] font-black text-[var(--text-muted)] text-right uppercase tracking-widest">Qty</div>
+            <div className="text-[8px] font-black text-[var(--text-muted)] text-right uppercase tracking-widest hidden sm:block">Price</div>
+            <div className="text-[8px] font-black text-[var(--text-muted)] text-right uppercase tracking-widest">Value</div>
+            <div className="text-[8px] font-black text-[var(--text-muted)] text-right uppercase tracking-widest hidden sm:block">P&L</div>
           </div>
-          <div className="flex flex-col">
+          <div>
             {liveAssets.map(asset => (
               <AssetRow key={asset.id} asset={asset} onRemove={handleRemoveAsset} />
             ))}

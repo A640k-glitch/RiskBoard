@@ -18,45 +18,49 @@ export function AssetRow({ asset, onRemove }: AssetRowProps) {
   const isPositive = pnl.greaterThanOrEqualTo(0);
 
   return (
-    <div className="flex items-center justify-between gap-2 py-3 px-4 hover:bg-[var(--bg-elevated)] transition-all duration-200 group rounded-xl border border-transparent hover:border-[var(--border)]">
-      <div className="flex flex-col w-[100px] sm:w-[140px] shrink-0">
-        <span className="font-sans font-bold text-[var(--text-primary)] text-xs sm:text-sm truncate">{asset.symbol.toUpperCase()}</span>
-        <span className="text-[10px] sm:text-xs text-[var(--text-muted)] font-medium mt-0.5 truncate">{asset.assetClass}</span>
+    <div className="grid grid-cols-[1fr_auto_auto_auto] sm:grid-cols-[1fr_auto_auto_auto_auto] items-center gap-x-3 sm:gap-x-4 py-2.5 px-3 sm:px-5 hover:bg-[var(--bg-elevated)] transition-colors group border-b border-[var(--border)]/40 last:border-0">
+      {/* Asset name + class */}
+      <div className="min-w-0">
+        <div className="font-sans font-bold text-[var(--text-primary)] text-xs sm:text-sm truncate">{asset.symbol.toUpperCase()}</div>
+        <div className="text-[9px] sm:text-[10px] text-[var(--text-muted)] font-medium truncate">{asset.assetClass}</div>
       </div>
-      
-      <div className="flex flex-1 justify-between items-center gap-2 sm:gap-4 overflow-hidden">
-        <div className="flex flex-col items-end w-[60px] sm:w-[100px] shrink-0">
-          <span className="font-mono text-[var(--text-primary)] text-[9px] sm:text-xs truncate">{asset.quantity.toString()}</span>
-          <span className="text-[8px] text-[var(--text-muted)] mt-0.5 uppercase tracking-tighter">Qty</span>
+
+      {/* Qty */}
+      <div className="text-right">
+        <div className="font-mono text-[var(--text-primary)] text-[10px] sm:text-xs">{asset.quantity.toString()}</div>
+        <div className="text-[8px] text-[var(--text-muted)] uppercase tracking-tighter">Qty</div>
+      </div>
+
+      {/* Price — hidden on mobile */}
+      <div className="text-right hidden sm:block">
+        <div className="font-mono text-[var(--text-primary)] text-[10px] sm:text-xs">{format(asset.currentPrice)}</div>
+        <div className="text-[8px] text-[var(--text-muted)] uppercase tracking-tighter">Price</div>
+      </div>
+
+      {/* Value */}
+      <div className="text-right">
+        <div className="font-mono text-[var(--text-primary)] text-[10px] sm:text-xs font-bold">{format(value)}</div>
+        <div className="text-[8px] text-[var(--text-muted)] uppercase tracking-tighter">Value</div>
+      </div>
+
+      {/* P&L — hidden on mobile, shown on sm+ */}
+      <div className="text-right hidden sm:block">
+        <div className={`font-mono text-[10px] sm:text-xs font-bold ${isPositive ? 'text-[var(--success)]' : 'text-[var(--danger)]'}`}>
+          {isPositive ? '+' : ''}{format(pnl)}
         </div>
-        
-        <div className="flex flex-col items-end w-[80px] sm:w-[100px] shrink-0 hidden sm:flex">
-          <span className="font-mono text-[var(--text-primary)] text-[9px] sm:text-xs truncate">{format(asset.currentPrice)}</span>
-          <span className="text-[8px] text-[var(--text-muted)] mt-0.5 uppercase tracking-tighter">Price</span>
-        </div>
-        
-        <div className="flex flex-col items-end w-[70px] sm:w-[100px] shrink-0">
-          <span className="font-mono text-[var(--text-primary)] text-[9px] sm:text-xs font-bold truncate">{format(value)}</span>
-          <span className="text-[8px] text-[var(--text-muted)] mt-0.5 uppercase tracking-tighter">Value</span>
-        </div>
-        
-        <div className="flex flex-col items-end w-[70px] sm:w-[100px] shrink-0">
-          <span className={`font-mono text-[9px] sm:text-xs font-bold truncate ${isPositive ? 'text-[var(--success)]' : 'text-[var(--danger)]'}`}>
-            {isPositive ? '+' : ''}{format(pnl)}
-          </span>
-          <span className={`text-[8px] mt-0.5 font-bold uppercase tracking-tighter ${isPositive ? 'text-[var(--success)]' : 'text-[var(--danger)]'}`}>
-            {isPositive ? '+' : ''}{pnlPercent.toFixed(1)}%
-          </span>
+        <div className={`text-[8px] font-bold uppercase tracking-tighter ${isPositive ? 'text-[var(--success)]' : 'text-[var(--danger)]'}`}>
+          {isPositive ? '+' : ''}{pnlPercent.toFixed(1)}%
         </div>
       </div>
 
-      <div className="flex items-center justify-end w-6 sm:w-8 shrink-0">
-        <button 
+      {/* Delete — always visible on mobile, hover-reveal on desktop */}
+      <div className="col-span-full sm:col-auto flex justify-end sm:justify-center pt-1 sm:pt-0">
+        <button
           onClick={() => onRemove(asset.id)}
-          className="text-[var(--text-muted)] hover:text-[var(--danger)] rounded-full md:opacity-0 group-hover:opacity-100 transition-opacity p-1.5"
+          className="text-[var(--text-muted)] hover:text-[var(--danger)] sm:opacity-0 sm:group-hover:opacity-100 transition-all p-1.5 rounded"
           aria-label="Remove asset"
         >
-          <Trash2 className="w-4 h-4" />
+          <Trash2 className="w-3.5 h-3.5" />
         </button>
       </div>
     </div>
