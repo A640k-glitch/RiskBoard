@@ -24,7 +24,7 @@ export function Landing() {
           className="w-full h-full object-cover grayscale brightness-[0.6] contrast-125"
           poster="/hero.png"
         >
-          <source src="https://assets.mixkit.co/videos/preview/mixkit-business-charts-and-data-on-a-screen-21443-large.mp4" type="video/mp4" />
+          <source src="https://assets.mixkit.co/videos/preview/mixkit-stock-market-chart-on-a-screen-14955-large.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)] via-black/20 to-[var(--bg-base)]" />
