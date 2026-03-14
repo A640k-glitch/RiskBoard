@@ -18,8 +18,10 @@ export function Dashboard() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 h-full flex flex-col overflow-y-auto no-scrollbar py-4">
-      <RiskDashboard />
+    <div className="h-full overflow-y-auto no-scrollbar">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 py-4 pb-6">
+        <RiskDashboard />
+      </div>
     </div>
   );
 }
