@@ -18,7 +18,7 @@ export function RiskDashboard() {
   const portfolio = portfolios[0];
   const assets = portfolio?.assets || [];
 
-  const { prices, history } = usePrices(assets);
+  const { prices, history, loading: pricesLoading } = usePrices(assets);
   const { currency, convert } = useCurrency();
   const [isInputOpen, setIsInputOpen] = useState(false);
 
@@ -42,12 +42,8 @@ export function RiskDashboard() {
 
   const handleRemoveAsset = async (id: string) => {
     if (!portfolio) return;
-    try {
-      await removeAsset(portfolio.id, id);
-      toast.success('Asset removed');
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to remove asset');
-    }
+    try { await removeAsset(portfolio.id, id); toast.success('Asset removed'); }
+    catch (e: any) { toast.error(e.message || 'Failed to remove asset'); }
   };
 
   if (portfolioLoading) {
@@ -57,7 +53,7 @@ export function RiskDashboard() {
           {[...Array(4)].map((_, i) => <SkeletonCard key={i} />)}
         </div>
         <SkeletonCard className="h-20" />
-        <SkeletonCard className="h-[240px]" />
+        <SkeletonCard className="h-[280px]" />
       </div>
     );
   }
@@ -66,28 +62,28 @@ export function RiskDashboard() {
     .formatToParts(1).find(x => x.type === 'currency')?.value || '$';
 
   return (
-    <div className="space-y-3 w-full">
+    <div className="space-y-4 w-full">
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[var(--border)] pb-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--border)] pb-4">
         <div>
-          <h1 className="text-lg sm:text-2xl font-black text-[var(--text-primary)] tracking-tight uppercase leading-none">
+          <h1 className="text-xl sm:text-3xl font-black text-[var(--text-primary)] tracking-tight uppercase leading-none">
             Intelligence_<span className="text-[var(--accent)] opacity-80">Stream</span>
           </h1>
-          <p className="text-[7px] sm:text-[8px] text-[var(--text-muted)] mt-1 font-black uppercase tracking-[0.3em]">Protocol_v3.2 // LIVE_METRICS</p>
+          <p className="text-[10px] sm:text-xs text-[var(--text-muted)] mt-1.5 font-black uppercase tracking-[0.3em]">Protocol_v3.2 // LIVE_METRICS</p>
         </div>
         <button
           onClick={() => setIsInputOpen(true)}
-          className="self-start sm:self-auto bg-[var(--text-primary)] text-[var(--bg-base)] px-3 py-2 rounded font-black text-[9px] uppercase tracking-[0.2em] hover:opacity-90 transition-all flex items-center gap-2 shrink-0"
+          className="self-start sm:self-auto bg-[var(--text-primary)] text-[var(--bg-base)] px-4 py-2.5 rounded font-black text-xs uppercase tracking-[0.2em] hover:opacity-90 transition-all flex items-center gap-2 shrink-0"
         >
-          <Plus className="w-3 h-3" /> Add_Position
+          <Plus className="w-3.5 h-3.5" /> Add_Position
         </button>
       </div>
 
       {metrics ? (
         <>
           {/* Metric Cards */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <MetricCard label="Total Value" value={convert(metrics.totalValue).toFixed(2)} prefix={currencySymbol} />
             <MetricCard label="Total P&L" value={Math.abs(convert(metrics.totalPnL)).toFixed(2)} prefix={metrics.totalPnL.greaterThanOrEqualTo(0) ? `+${currencySymbol}` : `-${currencySymbol}`} delta={metrics.pnlPercent.toFixed(2)} />
             <MetricCard label="Sharpe Ratio" value={metrics.sharpeRatio.toFixed(2)} />
@@ -97,21 +93,22 @@ export function RiskDashboard() {
           {/* Risk Badge */}
           <RiskBadge level={metrics.riskLevel} score={metrics.riskScore} verdict={metrics.riskVerdict} />
 
-          {/* Charts */}
+          {/* Charts — flex flex-col so inner flex-1 works */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
-            <div className="lg:col-span-4 apple-card p-2 h-[220px] sm:h-[260px]">
+            <div className="lg:col-span-4 apple-card flex flex-col" style={{ height: '260px' }}>
               <AllocationChart assets={liveAssets} />
             </div>
-            <div className="lg:col-span-8 apple-card p-2 h-[220px] sm:h-[260px]">
+            <div className="lg:col-span-8 apple-card flex flex-col" style={{ height: '260px' }}>
               <VolatilityChart history={history} />
             </div>
           </div>
         </>
       ) : (
         <div className="apple-card p-10 text-center border-dashed border-2">
-          <h3 className="text-base font-semibold text-[var(--text-primary)] mb-2">No Assets Yet</h3>
-          <p className="text-[var(--text-muted)] mb-6 text-sm">Add your first asset to see your risk analytics.</p>
-          <button onClick={() => setIsInputOpen(true)} className="bg-[var(--text-primary)] text-[var(--bg-base)] px-4 py-2 rounded text-sm font-medium hover:opacity-90 transition-opacity inline-flex items-center gap-2">
+          <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">No Assets Yet</h3>
+          <p className="text-[var(--text-muted)] mb-6">Add your first asset to see your risk analytics.</p>
+          <button onClick={() => setIsInputOpen(true)}
+            className="bg-[var(--text-primary)] text-[var(--bg-base)] px-5 py-2.5 rounded font-semibold hover:opacity-90 transition-opacity inline-flex items-center gap-2">
             <Plus className="w-4 h-4" /> Add Asset
           </button>
         </div>
@@ -120,18 +117,15 @@ export function RiskDashboard() {
       {/* Assets Table */}
       {liveAssets.length > 0 && (
         <div className="apple-card overflow-hidden">
-          {/* Table header — matches AssetRow grid */}
-          <div className="grid grid-cols-[1fr_auto_auto_auto] sm:grid-cols-[1fr_auto_auto_auto_auto] items-center gap-x-3 sm:gap-x-4 py-2 px-3 sm:px-5 border-b border-[var(--border)] bg-[var(--bg-surface)]">
-            <div className="text-[8px] font-black text-[var(--text-muted)] uppercase tracking-widest">Asset_Class</div>
-            <div className="text-[8px] font-black text-[var(--text-muted)] text-right uppercase tracking-widest">Qty</div>
-            <div className="text-[8px] font-black text-[var(--text-muted)] text-right uppercase tracking-widest hidden sm:block">Price</div>
-            <div className="text-[8px] font-black text-[var(--text-muted)] text-right uppercase tracking-widest">Value</div>
-            <div className="text-[8px] font-black text-[var(--text-muted)] text-right uppercase tracking-widest hidden sm:block">P&L</div>
+          <div className="grid grid-cols-[1fr_auto_auto_auto] sm:grid-cols-[1fr_auto_auto_auto_auto] items-center gap-x-4 sm:gap-x-6 py-2.5 px-4 sm:px-6 border-b border-[var(--border)] bg-[var(--bg-surface)]">
+            <div className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest">Asset_Class</div>
+            <div className="text-[10px] font-black text-[var(--text-muted)] text-right uppercase tracking-widest">Qty</div>
+            <div className="text-[10px] font-black text-[var(--text-muted)] text-right uppercase tracking-widest hidden sm:block">Price</div>
+            <div className="text-[10px] font-black text-[var(--text-muted)] text-right uppercase tracking-widest">Value</div>
+            <div className="text-[10px] font-black text-[var(--text-muted)] text-right uppercase tracking-widest hidden sm:block">P&L</div>
           </div>
           <div>
-            {liveAssets.map(asset => (
-              <AssetRow key={asset.id} asset={asset} onRemove={handleRemoveAsset} />
-            ))}
+            {liveAssets.map(asset => <AssetRow key={asset.id} asset={asset} onRemove={handleRemoveAsset} />)}
           </div>
         </div>
       )}
@@ -141,14 +135,8 @@ export function RiskDashboard() {
         onClose={() => setIsInputOpen(false)}
         onSubmit={async (asset) => {
           try {
-            if (portfolio) {
-              await addAsset(portfolio.id, asset);
-              toast.success('Asset added successfully');
-            }
-          } catch (e: any) {
-            toast.error(e.message || 'Failed to add asset');
-            throw e;
-          }
+            if (portfolio) { await addAsset(portfolio.id, asset); toast.success('Asset added'); }
+          } catch (e: any) { toast.error(e.message || 'Failed to add asset'); throw e; }
         }}
       />
     </div>
